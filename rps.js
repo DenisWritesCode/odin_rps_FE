@@ -1,41 +1,34 @@
-const rock = document.querySelector('.rock');
-const paper = document.querySelector('.paper');
-const scissors = document.querySelector('.scissors');
-const divAnswers = document.querySelector('.answers');
+const rock = document.querySelector(".rock");
+const paper = document.querySelector(".paper");
+const scissors = document.querySelector(".scissors");
+const divAnswers = document.querySelector(".answers");
+let machineCount = 0, humanCount = 0, ties = 0;
 
-rock.addEventListener('click', () => {
-  console.log(game('rock'));
-
+rock.addEventListener("click", () => {
+  console.log(game("rock"));
 });
 
-paper.addEventListener('click', () => {
-  console.log(game('paper'));
+paper.addEventListener("click", () => {
+  console.log(game("paper"));
 });
 
-scissors.addEventListener('click', () => {
-  console.log(game('scissors'));
+scissors.addEventListener("click", () => {
+  console.log(game("scissors"));
 });
-
 
 // Picks the computer's choice randomly.
 const computerPlay = () => {
   // 0 -> Rock, 1 -> Paper, 2 -> Scissors
-  let computerChoice = Math.floor(Math.random() * 9); // Because it became too easy for a tie.
+  let computerChoice = Math.floor(Math.random() * 3); // Because it became too easy for a tie.
 
   switch (computerChoice) {
     case 0:
-    case 1:
-    case 2:
       computerChoice = "rock";
       break;
-    case 3:
-    case 4:
-    case 5:
+    case 1:
       computerChoice = "paper";
       break;
-    case 6:
-    case 7:
-    case 8:
+    case 2:
       computerChoice = "scissors";
       break;
     default:
@@ -46,8 +39,31 @@ const computerPlay = () => {
 };
 
 const updateUI = (compSelection, humanSelection, result) => {
+  let textContent = '';
 
-  divAnswers.innerHTML = `<p>Computer: ${compSelection}</p><p>Human: ${humanSelection}</p><p>Winner: ${result}</p>`
+  if (result === "Machine") machineCount++;
+  else if (result == "Human Player") humanCount++;
+  else ++ties;
+
+  textContent = `
+    <p>Computer: ${compSelection}</p>
+    <p>Human: ${humanSelection}</p>
+    <p>Winner: ${result}</p>
+    <p>Human Player Wins: ${humanCount}</p>
+    <p>Machine Wins: ${machineCount}</p>
+    <p>Ties in Game: ${ties}</p>
+
+  `;
+
+  divAnswers.innerHTML = textContent;
+
+  if( humanCount >= 5 || machineCount >= 5) {
+    const winText = (humanCount > machineCount)? 'Won by human': 'Won by machine';
+    humanCount = 0;
+    machineCount = 0;
+    ties = 0;
+    alert(winText);
+  }
 };
 
 const playRound = (computerSelection, playerSelection) => {
@@ -75,8 +91,8 @@ const playRound = (computerSelection, playerSelection) => {
   }
   // Tie
   else {
-    console.log(playerSelection, computerSelection);
-    outcome = "Well, That's funny. Seems like you read each other's mind resulting in a Tie";
+    outcome =
+      "Well, That's funny. Seems like you read each other's mind resulting in a Tie";
   }
 
   updateUI(computerSelection, playerSelection, outcome);
@@ -85,18 +101,11 @@ const playRound = (computerSelection, playerSelection) => {
 };
 
 const game = (playerChoice) => {
-  // Learned loops from elsewhere.
-  let winner = "",
-    machineWins = 0,
-    humanWins = 0;
-
   // Actually get computer answer
   const computerSelection = computerPlay();
-  // Get human to play then sanitise
 
-  winner = playRound(computerSelection, playerChoice);
-  if (winner === "H") return 'Human won';
-  else if ( winner === 'M') return 'Machine Won';
-  else return 'Tie';
+  const winner = playRound(computerSelection, playerChoice);
+  if (winner === "Human Player") return "Human won";
+  else if (winner === "Machine") return "Machine Won";
+  else return "Tie";
 };
-
