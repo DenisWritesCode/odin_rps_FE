@@ -1,16 +1,40 @@
+const rock = document.querySelector('.rock');
+const paper = document.querySelector('.paper');
+const scissors = document.querySelector('.scissors');
+
+rock.addEventListener('click', () => {
+  console.log(game('rock'));
+
+});
+
+paper.addEventListener('click', () => {
+  console.log(game('paper'));
+});
+
+scissors.addEventListener('click', () => {
+  console.log(game('scissors'));
+});
+
+
 // Picks the computer's choice randomly.
 const computerPlay = () => {
   // 0 -> Rock, 1 -> Paper, 2 -> Scissors
-  let computerChoice = Math.floor(Math.random() * 3);
+  let computerChoice = Math.floor(Math.random() * 9); // Because it became too easy for a tie.
 
   switch (computerChoice) {
     case 0:
+    case 1:
+    case 2:
       computerChoice = "rock";
       break;
-    case 1:
+    case 3:
+    case 4:
+    case 5:
       computerChoice = "paper";
       break;
-    case 2:
+    case 6:
+    case 7:
+    case 8:
       computerChoice = "scissors";
       break;
     default:
@@ -20,11 +44,6 @@ const computerPlay = () => {
   return computerChoice;
 };
 
-// Collect User's choice
-const playerInput = () => {
-  const playerChoice = prompt("Enter Rock, Paper, Scissors: ");
-  return playerChoice;
-};
 
 const playRound = (computerSelection, playerSelection) => {
   // Determine winner.
@@ -46,39 +65,31 @@ const playRound = (computerSelection, playerSelection) => {
   // scissors beats paper
   else if (computerSelection === "scissors" && playerSelection === "paper") {
     outcome = "M";
-  } else if (computerSelection === "paper" && playerSelection === "scissors") {
+  } else if (computerSelection === "paper" && playerSelection === "rock") {
     outcome = "H";
   }
-  // Edge case
+  // Tie
   else {
-    outcome = "Well, That's funny. Make sure you typed in a valid play";
+    console.log(playerSelection, computerSelection);
+    outcome = "Well, That's funny. Seems like you read each other's mind";
   }
 
   return outcome;
 };
 
-const game = () => {
+const game = (playerChoice) => {
   // Learned loops from elsewhere.
   let winner = "",
     machineWins = 0,
     humanWins = 0;
 
   // Actually get computer answer
-  let computerSelection = computerPlay();
+  const computerSelection = computerPlay();
   // Get human to play then sanitise
-  let playerSelection = playerInput();
-  playerSelection = playerSelection.trim().toLowerCase();
 
-  winner = playRound(computerSelection, playerSelection);
-  console.log("Winner: ", winner);
-  if (winner === "H") humanWins++;
-  else if (winner === "M") machineWins++;
-
-  return machineWins > humanWins
-    ? "Machine won"
-    : humanWins > machineWins
-    ? "Human won"
-    : "Tie";
+  winner = playRound(computerSelection, playerChoice);
+  if (winner === "H") return 'Human won';
+  else if ( winner === 'M') return 'Machine Won';
+  else return 'Tie';
 };
 
-console.log(game());
