@@ -1,6 +1,7 @@
 const rock = document.querySelector('.rock');
 const paper = document.querySelector('.paper');
 const scissors = document.querySelector('.scissors');
+const divAnswers = document.querySelector('.answers');
 
 rock.addEventListener('click', () => {
   console.log(game('rock'));
@@ -44,6 +45,10 @@ const computerPlay = () => {
   return computerChoice;
 };
 
+const updateUI = (compSelection, humanSelection, result) => {
+
+  divAnswers.innerHTML = `<p>Computer: ${compSelection}</p><p>Human: ${humanSelection}</p><p>Winner: ${result}</p>`
+};
 
 const playRound = (computerSelection, playerSelection) => {
   // Determine winner.
@@ -52,27 +57,29 @@ const playRound = (computerSelection, playerSelection) => {
   let outcome;
   // paper beats rock
   if (computerSelection === "paper" && playerSelection === "rock") {
-    outcome = "M";
+    outcome = "Machine";
   } else if (computerSelection === "rock" && playerSelection === "paper") {
-    outcome = "H";
+    outcome = "Human Player";
   }
   // rock beats scissors
   else if (computerSelection === "rock" && playerSelection === "scissors") {
-    outcome = "M";
+    outcome = "Machine";
   } else if (computerSelection === "scissors" && playerSelection === "rock") {
-    outcome = "H";
+    outcome = "Human Player";
   }
   // scissors beats paper
   else if (computerSelection === "scissors" && playerSelection === "paper") {
-    outcome = "M";
+    outcome = "Machine";
   } else if (computerSelection === "paper" && playerSelection === "rock") {
-    outcome = "H";
+    outcome = "Human Player";
   }
   // Tie
   else {
     console.log(playerSelection, computerSelection);
-    outcome = "Well, That's funny. Seems like you read each other's mind";
+    outcome = "Well, That's funny. Seems like you read each other's mind resulting in a Tie";
   }
+
+  updateUI(computerSelection, playerSelection, outcome);
 
   return outcome;
 };
